@@ -31,13 +31,13 @@ const MyModel = () =>{
             meshParent.scale.set(.001,.001,.001);
             
             meshParent.updateMatrix();
-            if(!setColor){
-              groupRef.current.setColorAt(i, new THREE.Color(Math.random(),Math.random(),Math.random()));
-              updateColor(true);
-            }
+            // if(!setColor){
+            //   groupRef.current.setColorAt(i, new THREE.Color(Math.random(),Math.random(),Math.random()));
+            //   updateColor(true);
+            // }
             groupRef.current.setMatrixAt(i++, meshParent.matrix);
           }
-          groupRef.current.instanceColor.needsUpdate = true;
+          // groupRef.current.instanceColor.needsUpdate = true;
           groupRef.current.instanceMatrix.needsUpdate = true;
         }
       }
