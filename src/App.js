@@ -1,8 +1,8 @@
-import {OrbitControls,useGLTF} from '@react-three/drei';
+import {Instances, OrbitControls,useGLTF,Instance} from '@react-three/drei';
 import { Canvas,useFrame} from '@react-three/fiber';
 import React, {useRef, useState} from 'react';
 import * as THREE from 'three';
-import { Object3D } from 'three';
+import { Object3D} from 'three';
 
 const MyModel = () =>{
    const groupRef = useRef();
@@ -10,9 +10,9 @@ const MyModel = () =>{
    const meshParent = new Object3D();
    const cloneNo=5;
    const [setColor,updateColor] = useState(false);
+   const mat = materials['69.005'];
    useFrame(({clock})=>{
      if(groupRef){
-
       const time = clock.getElapsedTime();
       groupRef.current.rotation.x = Math.sin(time / 4);
       groupRef.current.rotation.y = Math.sin(time / 2);
@@ -47,16 +47,61 @@ const MyModel = () =>{
     // groupRef.current.position = new THREE.Vector3(Math.random()*5,2,Math.random()*5);
    })
    return(
-      <instancedMesh ref={groupRef} args={[nodes.mesh_id4005.geometry,materials,cloneNo*cloneNo*cloneNo]}  rotation={[Math.PI,0,0]}
+      <instancedMesh ref={groupRef} args={[nodes.mesh_id4005.geometry,mat,cloneNo*cloneNo*cloneNo]}  rotation={[Math.PI,0,0]}
        position={[0,0,0]} 
       >
-       <meshStandardMaterial/>
+       {/* <meshStandardMaterial/> */}
       </instancedMesh>
    )
 }
 
 
+// const ThreeInstances = ()=>{
+    
+//     const { nodes, materials } = useGLTF('shelf-lowpoly-draco.glb');
+//     const mesh = nodes['mesh_id4005']['geometry'];
+//     const mat = materials['69.005'];
+//     const randomVector = (r) => [r / 2 - Math.random() * r, r / 2 - Math.random() * r, r / 2 - Math.random() * r]
+//     const randomEuler = () => [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI]
+//     const data = Array.from({ length: 10000 }, (r = 10000) => ({ random: Math.random(), position: randomVector(r), rotation: randomEuler() }))
+   
+//     return (
+//       <Instances range={10} material={mat} geometry={nodes.mesh_id4005.geometry} scale={.001}>
+//         <meshStandardMaterial color={"#ff0000"}/>
+//         <group position={[0, 0, 0]}>
+//           {
+//             data.map((props, i) => (
+//               <SingleInstance key={i} {...props}/>
+//             ))
+//           }
+//         </group>
+//       </Instances>
+//     )
 
+    
+// }
+// let c=0;
+// const SingleInstance = ({random, color=new THREE.Color(), ...props}) => {
+//   const groupRef = useRef();
+  
+//   useFrame(({clock}) => {
+//     if(!groupRef)
+//        return
+//     const t = clock.getElapsedTime()+random*10000; 
+//       groupRef.current.rotation.set(Math.cos(t / 4) / 2, Math.sin(t / 4) / 2, Math.cos(t / 1.5) / 2)
+//       groupRef.current.position.y = Math.sin(t / 1.5) / 2
+//       // groupRef.current.scale.x = groupRef.current.scale.y = groupRef.current.scale.z = THREE.MathUtils.lerp(groupRef.current.scale.z,1,0.1)
+//       // groupRef.current.color.lerp(new THREE.Color().set('blue'),0)
+//       // groupRef.current.setColor("blue") 
+//       // groupRef.current.instance.current.material.color.setHex(0x0000ff);
+//     })
+//     return(
+//         <group {...props}>
+//             <Instance ref={groupRef}/>
+            
+//         </group>
+//     )
+// }
 const App = () => {
   return (
     <div
@@ -67,13 +112,16 @@ const App = () => {
     >
       <Canvas camera={ {near:.1,far:1000,zoom:1,position:[0,0,10]}}
           onCreated={({ gl }) => {
-            gl.setClearColor("#000000");
+            gl.setClearColor("#ffffff");
           }}
       >
        <OrbitControls/>
-       <hemisphereLight intensity={1}>
-         <MyModel/>
-       </hemisphereLight>
+       <directionalLight intensity={3} position={[5,10,7.5]}>
+       </directionalLight>
+       <directionalLight intensity={3} position={[-16,-13,-20]}>
+       </directionalLight>
+
+       <MyModel/>
       </Canvas>
     </div>
   );

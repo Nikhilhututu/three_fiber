@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta
+name="viewport"
+content="initial-scale=1,maximum-scale=1,user-scalable=no"
+/>
+<title>Simple Map Demo</title>
+<style>
+html,
+body,
+#viewDiv {
+padding: 0;
+margin: 0;
+height: 100%;
+width: 100%;
+}
+</style>
+
+
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css"/>
+<script src="https://js.arcgis.com/4.25/"></script>
+
+
+
+<script>
+	require([
+	"esri/Map",
+	"esri/views/MapView",
+	"esri/Basemap",
+	"esri/layers/WebTileLayer",
+	"esri/layers/GeoJSONLayer",
+	], function (Map, MapView, Basemap, WebTileLayer, GeoJSONLayer) {
+		const customBasemap = new Basemap({
+			baseLayers: [
+				new WebTileLayer({
+					urlTemplate: "https://tiles.stadiamaps.com/tiles/alidade_smooth/{level}/{col}/{row}.png",
+				}),
+			],
+			title: "basemap",
+			id: "basemap",
+		});
+
+		const map = new Map({
+			basemap: customBasemap,
+			});
+
+		const view = new MapView({
+			container: "viewDiv",
+			map: map,
+			zoom: 16,
+			center: [-3.6870837, 40.4144269], // longitude, latitude
+		});
+
+
+
+		const data = {
+			type: "FeatureCollection",
+			features: [{
+					
+					type: "Feature",
+					properties: {},
+					geometry: {
+						coordinates: [
+						[
+						[-3.6852391068131, 40.41816210071431],
+						[-3.684317966031813, 40.41569349804391],
+						[-3.682659912625354, 40.41607221001712],
+						[-3.68363632185347, 40.41854079879266],
+						[-3.6852391068131, 40.41816210071431],
+						],
+						],
+						type: "Polygon",
+					},
+				},
+				{
+					type: "Feature",
+					properties: {},
+					geometry: {
+						coordinates: [
+						[
+						[-3.682494107285038, 40.4110365691603],
+						[-3.683691590300242, 40.41406641494504],
+						[-3.6887947102290752, 40.41396822763713],
+						[-3.6886657505195615, 40.409633816580936],
+						[-3.682494107285038, 40.4110365691603],
+						],
+						],
+						type: "Polygon",
+					},
+				},
+				],
+			};
+
+
+
+	const blob = new Blob([JSON.stringify(data)], {
+		type: "application/json",
+	});
+
+
+
+	const url = URL.createObjectURL(blob);
+
+
+
+/*
+note we wouldn't normally create the URL using the method above
+we would normally get the data via a real URL
+*/
+
+
+
+	const layer = new GeoJSONLayer({
+		url,
+	});
+
+	map.add(layer);
+
+});
+</script>
+</head>
+
+
+
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>
